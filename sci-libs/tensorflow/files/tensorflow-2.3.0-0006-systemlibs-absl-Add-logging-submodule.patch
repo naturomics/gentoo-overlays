@@ -1,0 +1,41 @@
+diff --git a/tensorflow/opensource_only.files b/tensorflow/opensource_only.files
+index 1b08d2b..aed8d14 100644
+--- a/tensorflow/opensource_only.files
++++ b/tensorflow/opensource_only.files
+@@ -170,6 +170,7 @@ tensorflow/third_party/systemlibs/BUILD.tpl
+ tensorflow/third_party/systemlibs/absl_py.BUILD
+ tensorflow/third_party/systemlibs/absl_py.absl.flags.BUILD
+ tensorflow/third_party/systemlibs/absl_py.absl.testing.BUILD
++tensorflow/third_party/systemlibs/absl_py.absl.logging.BUILD
+ tensorflow/third_party/systemlibs/astor.BUILD
+ tensorflow/third_party/systemlibs/boringssl.BUILD
+ tensorflow/third_party/systemlibs/build_defs.bzl.tpl
+diff --git a/tensorflow/workspace.bzl b/tensorflow/workspace.bzl
+index 41ad744..dcb8605 100755
+--- a/tensorflow/workspace.bzl
++++ b/tensorflow/workspace.bzl
+@@ -535,6 +535,7 @@ def tf_repositories(path_prefix = "", tf_repo_name = ""):
+             "//third_party/systemlibs:absl_py.absl.BUILD": "absl/BUILD",
+             "//third_party/systemlibs:absl_py.absl.flags.BUILD": "absl/flags/BUILD",
+             "//third_party/systemlibs:absl_py.absl.testing.BUILD": "absl/testing/BUILD",
++            "//third_party/systemlibs:absl_py.absl.logging.BUILD": "absl/logging/BUILD",
+         },
+         urls = [
+             "https://storage.googleapis.com/mirror.tensorflow.org/github.com/abseil/abseil-py/archive/pypi-v0.9.0.tar.gz",
+diff --git a/third_party/systemlibs/absl_py.absl.logging.BUILD b/third_party/systemlibs/absl_py.absl.logging.BUILD
+new file mode 100644
+index 0000000..71cfc7a
+--- /dev/null
++++ b/third_party/systemlibs/absl_py.absl.logging.BUILD
+@@ -0,0 +1,11 @@
++licenses(["notice"])  # Apache 2.0
++
++package(default_visibility = ["//visibility:public"])
++
++filegroup(
++    name = "LICENSE",
++)
++
++py_library(
++    name = "logging",
++)

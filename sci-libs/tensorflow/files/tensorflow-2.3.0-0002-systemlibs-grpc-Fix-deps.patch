@@ -1,0 +1,572 @@
+diff --git a/tensorflow/workspace.bzl b/tensorflow/workspace.bzl
+index 24446d8..41ad744 100755
+--- a/tensorflow/workspace.bzl
++++ b/tensorflow/workspace.bzl
+@@ -691,6 +691,9 @@ def tf_repositories(path_prefix = "", tf_repo_name = ""):
+             "//third_party/systemlibs:BUILD": "bazel/BUILD",
+             "//third_party/systemlibs:grpc.BUILD": "src/compiler/BUILD",
+             "//third_party/systemlibs:grpc.bazel.grpc_deps.bzl": "bazel/grpc_deps.bzl",
++	    "//third_party/systemlibs:grpc.bazel.cc_grpc_library.bzl": "bazel/cc_grpc_library.bzl",
++	    "//third_party/systemlibs:grpc.bazel.generate_cc.bzl": "bazel/generate_cc.bzl",
++	    "//third_party/systemlibs:grpc.bazel.protobuf.bzl": "bazel/protobuf.bzl",
+         },
+         urls = [
+             "https://storage.googleapis.com/mirror.tensorflow.org/github.com/grpc/grpc/archive/b54a5b338637f92bfcf4b0bc05e0f57a5fd8fadd.tar.gz",
+diff --git a/third_party/systemlibs/grpc.BUILD b/third_party/systemlibs/grpc.BUILD
+index fd90eb0..a564081 100644
+--- a/third_party/systemlibs/grpc.BUILD
++++ b/third_party/systemlibs/grpc.BUILD
+@@ -7,25 +7,138 @@ filegroup(
+ 
+ cc_library(
+     name = "grpc",
+-    linkopts = ["-lgrpc"],
++    linkopts = ["-lgrpc", "-lgpr"],
+     visibility = ["//visibility:public"],
+ )
+ 
+ cc_library(
+     name = "grpc++",
+-    linkopts = ["-lgrpc++"],
++    linkopts = ["-lgrpc++", "-lgpr"],
+     visibility = ["//visibility:public"],
+ )
+ 
+ cc_library(
+     name = "grpc_unsecure",
+-    linkopts = ["-lgrpc_unsecure"],
++    linkopts = ["-lgrpc_unsecure", "-lgpr"],
+     visibility = ["//visibility:public"],
+ )
+ 
+ cc_library(
+     name = "grpc++_unsecure",
+-    linkopts = ["-lgrpc++_unsecure"],
++    linkopts = ["-lgrpc++_unsecure", "-lgpr"],
++    visibility = ["//visibility:public"],
++)
++
++cc_library(
++    name = "grpc++_codegen_proto",
++    linkopts = ["-lgrpc++_codegen_base", "-lgrpc++_config_proto"],
++    visibility = ["//visibility:public"],
++)
++
++GRPCXX_PUBLIC_HDRS = [
++    "include/grpc++/alarm.h",
++    "include/grpc++/channel.h",
++    "include/grpc++/client_context.h",
++    "include/grpc++/completion_queue.h",
++    "include/grpc++/create_channel.h",
++    "include/grpc++/create_channel_posix.h",
++    "include/grpc++/ext/health_check_service_server_builder_option.h",
++    "include/grpc++/generic/async_generic_service.h",
++    "include/grpc++/generic/generic_stub.h",
++    "include/grpc++/grpc++.h",
++    "include/grpc++/health_check_service_interface.h",
++    "include/grpc++/impl/call.h",
++    "include/grpc++/impl/channel_argument_option.h",
++    "include/grpc++/impl/client_unary_call.h",
++    "include/grpc++/impl/codegen/core_codegen.h",
++    "include/grpc++/impl/grpc_library.h",
++    "include/grpc++/impl/method_handler_impl.h",
++    "include/grpc++/impl/rpc_method.h",
++    "include/grpc++/impl/rpc_service_method.h",
++    "include/grpc++/impl/serialization_traits.h",
++    "include/grpc++/impl/server_builder_option.h",
++    "include/grpc++/impl/server_builder_plugin.h",
++    "include/grpc++/impl/server_initializer.h",
++    "include/grpc++/impl/service_type.h",
++    "include/grpc++/impl/sync_cxx11.h",
++    "include/grpc++/impl/sync_no_cxx11.h",
++    "include/grpc++/resource_quota.h",
++    "include/grpc++/security/auth_context.h",
++    "include/grpc++/security/auth_metadata_processor.h",
++    "include/grpc++/security/credentials.h",
++    "include/grpc++/security/server_credentials.h",
++    "include/grpc++/server.h",
++    "include/grpc++/server_builder.h",
++    "include/grpc++/server_context.h",
++    "include/grpc++/server_posix.h",
++    "include/grpc++/support/async_stream.h",
++    "include/grpc++/support/async_unary_call.h",
++    "include/grpc++/support/byte_buffer.h",
++    "include/grpc++/support/channel_arguments.h",
++    "include/grpc++/support/config.h",
++    "include/grpc++/support/slice.h",
++    "include/grpc++/support/status.h",
++    "include/grpc++/support/status_code_enum.h",
++    "include/grpc++/support/string_ref.h",
++    "include/grpc++/support/stub_options.h",
++    "include/grpc++/support/sync_stream.h",
++    "include/grpc++/support/time.h",
++    "include/grpcpp/alarm.h",
++    "include/grpcpp/channel.h",
++    "include/grpcpp/client_context.h",
++    "include/grpcpp/completion_queue.h",
++    "include/grpcpp/create_channel.h",
++    "include/grpcpp/create_channel_posix.h",
++    "include/grpcpp/ext/health_check_service_server_builder_option.h",
++    "include/grpcpp/generic/async_generic_service.h",
++    "include/grpcpp/generic/generic_stub.h",
++    "include/grpcpp/grpcpp.h",
++    "include/grpcpp/health_check_service_interface.h",
++    "include/grpcpp/impl/call.h",
++    "include/grpcpp/impl/channel_argument_option.h",
++    "include/grpcpp/impl/client_unary_call.h",
++    "include/grpcpp/impl/codegen/core_codegen.h",
++    "include/grpcpp/impl/grpc_library.h",
++    "include/grpcpp/impl/method_handler_impl.h",
++    "include/grpcpp/impl/rpc_method.h",
++    "include/grpcpp/impl/rpc_service_method.h",
++    "include/grpcpp/impl/serialization_traits.h",
++    "include/grpcpp/impl/server_builder_option.h",
++    "include/grpcpp/impl/server_builder_plugin.h",
++    "include/grpcpp/impl/server_initializer.h",
++    "include/grpcpp/impl/service_type.h",
++    "include/grpcpp/impl/sync_cxx11.h",
++    "include/grpcpp/impl/sync_no_cxx11.h",
++    "include/grpcpp/resource_quota.h",
++    "include/grpcpp/security/auth_context.h",
++    "include/grpcpp/security/auth_metadata_processor.h",
++    "include/grpcpp/security/credentials.h",
++    "include/grpcpp/security/server_credentials.h",
++    "include/grpcpp/server.h",
++    "include/grpcpp/server_builder.h",
++    "include/grpcpp/server_context.h",
++    "include/grpcpp/server_posix.h",
++    "include/grpcpp/support/async_stream.h",
++    "include/grpcpp/support/async_unary_call.h",
++    "include/grpcpp/support/byte_buffer.h",
++    "include/grpcpp/support/channel_arguments.h",
++    "include/grpcpp/support/client_callback.h",
++    "include/grpcpp/support/config.h",
++    "include/grpcpp/support/proto_buffer_reader.h",
++    "include/grpcpp/support/proto_buffer_writer.h",
++    "include/grpcpp/support/server_callback.h",
++    "include/grpcpp/support/slice.h",
++    "include/grpcpp/support/status.h",
++    "include/grpcpp/support/status_code_enum.h",
++    "include/grpcpp/support/string_ref.h",
++    "include/grpcpp/support/stub_options.h",
++    "include/grpcpp/support/sync_stream.h",
++    "include/grpcpp/support/time.h",
++]
++
++cc_library(
++    name = "grpc++_public_hdrs",
++    hdrs = GRPCXX_PUBLIC_HDRS,
+     visibility = ["//visibility:public"],
+ )
+ 
+diff --git a/third_party/systemlibs/grpc.bazel.cc_grpc_library.bzl b/third_party/systemlibs/grpc.bazel.cc_grpc_library.bzl
+new file mode 100644
+index 0000000..ce24978
+--- /dev/null
++++ b/third_party/systemlibs/grpc.bazel.cc_grpc_library.bzl
+@@ -0,0 +1,80 @@
++"""Generates and compiles C++ grpc stubs from proto_library rules."""
++
++load("//bazel:generate_cc.bzl", "generate_cc")
++
++def cc_grpc_library(
++        name,
++        srcs,
++        deps,
++        proto_only = False,
++        well_known_protos = False,
++        generate_mocks = False,
++        use_external = False,
++        grpc_only = False,
++        **kwargs):
++    """Generates C++ grpc classes for services defined in a proto file.
++
++    If grpc_only is True, this rule is compatible with proto_library and
++    cc_proto_library native rules such that it expects proto_library target
++    as srcs argument and generates only grpc library classes, expecting
++    protobuf messages classes library (cc_proto_library target) to be passed in
++    deps argument. By default grpc_only is False which makes this rule to behave
++    in a backwards-compatible mode (trying to generate both proto and grpc
++    classes).
++
++    Assumes the generated classes will be used in cc_api_version = 2.
++
++    Args:
++        name (str): Name of rule.
++        srcs (list): A single .proto file which contains services definitions,
++          or if grpc_only parameter is True, a single proto_library which
++          contains services descriptors.
++        deps (list): A list of C++ proto_library (or cc_proto_library) which
++          provides the compiled code of any message that the services depend on.
++        proto_only (bool): If True, create only C++ proto classes library,
++          avoid creating C++ grpc classes library (expect it in deps).
++          Deprecated, use native cc_proto_library instead. False by default.
++        well_known_protos (bool): Should this library additionally depend on
++          well known protos. Deprecated, the well known protos should be
++          specified as explicit dependencies of the proto_library target
++          (passed in srcs parameter) instead. False by default.
++        generate_mocks (bool): when True, Google Mock code for client stub is
++          generated. False by default.
++        use_external (bool): Not used.
++        grpc_only (bool): if True, generate only grpc library, expecting
++          protobuf messages library (cc_proto_library target) to be passed as
++          deps. False by default (will become True by default eventually).
++        **kwargs: rest of arguments, e.g., compatible_with and visibility
++    """
++    if len(srcs) > 1:
++        fail("Only one srcs value supported", "srcs")
++    if grpc_only and proto_only:
++        fail("A mutualy exclusive configuration is specified: grpc_only = True and proto_only = True")
++
++    extra_deps = []
++    proto_targets = []
++
++    if not srcs:
++        fail("srcs cannot be empty", "srcs")
++    proto_targets += srcs
++
++    if not proto_only:
++        codegen_grpc_target = "_" + name + "_grpc_codegen"
++        generate_cc(
++            name = codegen_grpc_target,
++            srcs = proto_targets,
++            plugin = "@com_github_grpc_grpc//src/compiler:grpc_cpp_plugin",
++            well_known_protos = well_known_protos,
++            generate_mocks = generate_mocks,
++            **kwargs
++        )
++
++        native.cc_library(
++            name = name,
++            srcs = [":" + codegen_grpc_target],
++            hdrs = [":" + codegen_grpc_target],
++            deps = deps +
++                   extra_deps +
++                   ["@com_github_grpc_grpc//:grpc++_codegen_proto"],
++            **kwargs
++        )
+diff --git a/third_party/systemlibs/grpc.bazel.generate_cc.bzl b/third_party/systemlibs/grpc.bazel.generate_cc.bzl
+new file mode 100644
+index 0000000..272900e
+--- /dev/null
++++ b/third_party/systemlibs/grpc.bazel.generate_cc.bzl
+@@ -0,0 +1,187 @@
++"""Generates C++ grpc stubs from proto_library rules.
++
++This is an internal rule used by cc_grpc_library, and shouldn't be used
++directly.
++"""
++
++load("@rules_proto//proto:defs.bzl", "ProtoInfo")
++load(
++    "//bazel:protobuf.bzl",
++    "get_include_directory",
++    "get_plugin_args",
++    "get_proto_root",
++    "proto_path_to_generated_filename",
++)
++
++_GRPC_PROTO_HEADER_FMT = "{}.grpc.pb.h"
++_GRPC_PROTO_SRC_FMT = "{}.grpc.pb.cc"
++_GRPC_PROTO_MOCK_HEADER_FMT = "{}_mock.grpc.pb.h"
++_PROTO_HEADER_FMT = "{}.pb.h"
++_PROTO_SRC_FMT = "{}.pb.cc"
++
++def _strip_package_from_path(label_package, file):
++    prefix_len = 0
++    if not file.is_source and file.path.startswith(file.root.path):
++        prefix_len = len(file.root.path) + 1
++
++    path = file.path
++    if len(label_package) == 0:
++        return path
++    if not path.startswith(label_package + "/", prefix_len):
++        fail("'{}' does not lie within '{}'.".format(path, label_package))
++    return path[prefix_len + len(label_package + "/"):]
++
++def _get_srcs_file_path(file):
++    if not file.is_source and file.path.startswith(file.root.path):
++        return file.path[len(file.root.path) + 1:]
++    return file.path
++
++def _join_directories(directories):
++    massaged_directories = [directory for directory in directories if len(directory) != 0]
++    return "/".join(massaged_directories)
++
++def generate_cc_impl(ctx):
++    """Implementation of the generate_cc rule."""
++    protos = [f for src in ctx.attr.srcs for f in src[ProtoInfo].check_deps_sources.to_list()]
++    includes = [
++        f
++        for src in ctx.attr.srcs
++        for f in src[ProtoInfo].transitive_imports.to_list()
++    ]
++    outs = []
++    proto_root = get_proto_root(
++        ctx.label.workspace_root,
++    )
++
++    label_package = _join_directories([ctx.label.workspace_root, ctx.label.package])
++    if ctx.executable.plugin:
++        outs += [
++            proto_path_to_generated_filename(
++                _strip_package_from_path(label_package, proto),
++                _GRPC_PROTO_HEADER_FMT,
++            )
++            for proto in protos
++        ]
++        outs += [
++            proto_path_to_generated_filename(
++                _strip_package_from_path(label_package, proto),
++                _GRPC_PROTO_SRC_FMT,
++            )
++            for proto in protos
++        ]
++        if ctx.attr.generate_mocks:
++            outs += [
++                proto_path_to_generated_filename(
++                    _strip_package_from_path(label_package, proto),
++                    _GRPC_PROTO_MOCK_HEADER_FMT,
++                )
++                for proto in protos
++            ]
++    else:
++        outs += [
++            proto_path_to_generated_filename(
++                _strip_package_from_path(label_package, proto),
++                _PROTO_HEADER_FMT,
++            )
++            for proto in protos
++        ]
++        outs += [
++            proto_path_to_generated_filename(
++                _strip_package_from_path(label_package, proto),
++                _PROTO_SRC_FMT,
++            )
++            for proto in protos
++        ]
++    out_files = [ctx.actions.declare_file(out) for out in outs]
++    dir_out = str(ctx.genfiles_dir.path + proto_root)
++
++    arguments = []
++    if ctx.executable.plugin:
++        arguments += get_plugin_args(
++            ctx.executable.plugin,
++            ctx.attr.flags,
++            dir_out,
++            ctx.attr.generate_mocks,
++        )
++        tools = [ctx.executable.plugin]
++    else:
++        arguments += ["--cpp_out=" + ",".join(ctx.attr.flags) + ":" + dir_out]
++        tools = []
++
++    arguments += [
++        "--proto_path={}".format(get_include_directory(i))
++        for i in includes
++    ]
++
++    # Include the output directory so that protoc puts the generated code in the
++    # right directory.
++    arguments += ["--proto_path={0}{1}".format(dir_out, proto_root)]
++    arguments += [_get_srcs_file_path(proto) for proto in protos]
++
++    # create a list of well known proto files if the argument is non-None
++    well_known_proto_files = []
++    if ctx.attr.well_known_protos:
++        f = ctx.attr.well_known_protos.files.to_list()[0].dirname
++        if f != "external/com_google_protobuf/src/google/protobuf":
++            print(
++                "Error: Only @com_google_protobuf//:well_known_protos is supported",
++            )
++        else:
++            # f points to "external/com_google_protobuf/src/google/protobuf"
++            # add -I argument to protoc so it knows where to look for the proto files.
++            arguments += ["-I{0}".format(f + "/../..")]
++            well_known_proto_files = [
++                f
++                for f in ctx.attr.well_known_protos.files.to_list()
++            ]
++
++    ctx.actions.run(
++        inputs = protos + includes + well_known_proto_files,
++        tools = tools,
++        outputs = out_files,
++        executable = ctx.executable._protoc,
++        arguments = arguments,
++    )
++
++    return struct(files = depset(out_files))
++
++_generate_cc = rule(
++    attrs = {
++        "srcs": attr.label_list(
++            mandatory = True,
++            allow_empty = False,
++            providers = [ProtoInfo],
++        ),
++        "plugin": attr.label(
++            executable = True,
++            providers = ["files_to_run"],
++            cfg = "host",
++        ),
++        "flags": attr.string_list(
++            mandatory = False,
++            allow_empty = True,
++        ),
++        "well_known_protos": attr.label(mandatory = False),
++        "generate_mocks": attr.bool(
++            default = False,
++            mandatory = False,
++        ),
++        "_protoc": attr.label(
++            default = Label("@com_google_protobuf//:protoc"),
++            executable = True,
++            cfg = "host",
++        ),
++    },
++    # We generate .h files, so we need to output to genfiles.
++    output_to_genfiles = True,
++    implementation = generate_cc_impl,
++)
++
++def generate_cc(well_known_protos, **kwargs):
++    if well_known_protos:
++        _generate_cc(
++            well_known_protos = "@com_google_protobuf//:well_known_protos",
++            **kwargs
++        )
++    else:
++        _generate_cc(**kwargs)
+diff --git a/third_party/systemlibs/grpc.bazel.protobuf.bzl b/third_party/systemlibs/grpc.bazel.protobuf.bzl
+new file mode 100644
+index 0000000..4dc40b4
+--- /dev/null
++++ b/third_party/systemlibs/grpc.bazel.protobuf.bzl
+@@ -0,0 +1,126 @@
++"""Utility functions for generating protobuf code."""
++
++_PROTO_EXTENSION = ".proto"
++_VIRTUAL_IMPORTS = "/_virtual_imports/"
++
++def get_proto_root(workspace_root):
++    """Gets the root protobuf directory.
++
++    Args:
++      workspace_root: context.label.workspace_root
++
++    Returns:
++      The directory relative to which generated include paths should be.
++    """
++    if workspace_root:
++        return "/{}".format(workspace_root)
++    else:
++        return ""
++
++def _strip_proto_extension(proto_filename):
++    if not proto_filename.endswith(_PROTO_EXTENSION):
++        fail('"{}" does not end with "{}"'.format(
++            proto_filename,
++            _PROTO_EXTENSION,
++        ))
++    return proto_filename[:-len(_PROTO_EXTENSION)]
++
++def proto_path_to_generated_filename(proto_path, fmt_str):
++    """Calculates the name of a generated file for a protobuf path.
++
++    For example, "examples/protos/helloworld.proto" might map to
++      "helloworld.pb.h".
++
++    Args:
++      proto_path: The path to the .proto file.
++      fmt_str: A format string used to calculate the generated filename. For
++        example, "{}.pb.h" might be used to calculate a C++ header filename.
++
++    Returns:
++      The generated filename.
++    """
++    return fmt_str.format(_strip_proto_extension(proto_path))
++
++def get_include_directory(source_file):
++    """Returns the include directory path for the source_file. I.e. all of the
++    include statements within the given source_file are calculated relative to
++    the directory returned by this method.
++
++    The returned directory path can be used as the "--proto_path=" argument
++    value.
++
++    Args:
++      source_file: A proto file.
++
++    Returns:
++      The include directory path for the source_file.
++    """
++    directory = source_file.path
++    prefix_len = 0
++
++    if is_in_virtual_imports(source_file):
++        root, relative = source_file.path.split(_VIRTUAL_IMPORTS, 2)
++        result = root + _VIRTUAL_IMPORTS + relative.split("/", 1)[0]
++        return result
++
++    if not source_file.is_source and directory.startswith(source_file.root.path):
++        prefix_len = len(source_file.root.path) + 1
++
++    if directory.startswith("external", prefix_len):
++        external_separator = directory.find("/", prefix_len)
++        repository_separator = directory.find("/", external_separator + 1)
++        return directory[:repository_separator]
++    else:
++        return source_file.root.path if source_file.root.path else "."
++
++def get_plugin_args(
++        plugin,
++        flags,
++        dir_out,
++        generate_mocks,
++        plugin_name = "PLUGIN"):
++    """Returns arguments configuring protoc to use a plugin for a language.
++
++    Args:
++      plugin: An executable file to run as the protoc plugin.
++      flags: The plugin flags to be passed to protoc.
++      dir_out: The output directory for the plugin.
++      generate_mocks: A bool indicating whether to generate mocks.
++      plugin_name: A name of the plugin, it is required to be unique when there
++      are more than one plugin used in a single protoc command.
++    Returns:
++      A list of protoc arguments configuring the plugin.
++    """
++    augmented_flags = list(flags)
++    if generate_mocks:
++        augmented_flags.append("generate_mock_code=true")
++
++    augmented_dir_out = dir_out
++    if augmented_flags:
++        augmented_dir_out = ",".join(augmented_flags) + ":" + dir_out
++
++    return [
++        "--plugin=protoc-gen-{plugin_name}={plugin_path}".format(
++            plugin_name = plugin_name,
++            plugin_path = plugin.path,
++        ),
++        "--{plugin_name}_out={dir_out}".format(
++            plugin_name = plugin_name,
++            dir_out = augmented_dir_out,
++        ),
++    ]
++
++def is_in_virtual_imports(source_file, virtual_folder = _VIRTUAL_IMPORTS):
++    """Determines if source_file is virtual (is placed in _virtual_imports
++    subdirectory). The output of all proto_library targets which use
++    import_prefix  and/or strip_import_prefix arguments is placed under
++    _virtual_imports directory.
++
++    Args:
++        source_file: A proto file.
++        virtual_folder: The virtual folder name (is set to "_virtual_imports"
++            by default)
++    Returns:
++        True if source_file is located under _virtual_imports, False otherwise.
++    """
++    return not source_file.is_source and virtual_folder in source_file.path

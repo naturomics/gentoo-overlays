@@ -1,0 +1,40 @@
+diff --git a/tensorflow/core/platform/default/build_config.bzl b/tensorflow/core/platform/default/build_config.bzl
+index 2dc4fdc..9532141 100644
+--- a/tensorflow/core/platform/default/build_config.bzl
++++ b/tensorflow/core/platform/default/build_config.bzl
+@@ -10,26 +10,6 @@ load(
+     "if_mkl_ml",
+ )
+ 
+-def well_known_proto_libs():
+-    """Set of standard protobuf protos, like Any and Timestamp.
+-
+-    This list should be provided by protobuf.bzl, but it's not.
+-    """
+-    return [
+-        "@com_google_protobuf//:any_proto",
+-        "@com_google_protobuf//:api_proto",
+-        "@com_google_protobuf//:compiler_plugin_proto",
+-        "@com_google_protobuf//:descriptor_proto",
+-        "@com_google_protobuf//:duration_proto",
+-        "@com_google_protobuf//:empty_proto",
+-        "@com_google_protobuf//:field_mask_proto",
+-        "@com_google_protobuf//:source_context_proto",
+-        "@com_google_protobuf//:struct_proto",
+-        "@com_google_protobuf//:timestamp_proto",
+-        "@com_google_protobuf//:type_proto",
+-        "@com_google_protobuf//:wrappers_proto",
+-    ]
+-
+ # Appends a suffix to a list of deps.
+ def tf_deps(deps, suffix):
+     tf_deps = []
+@@ -512,7 +492,7 @@ def tf_proto_library(
+     native.proto_library(
+         name = name,
+         srcs = srcs,
+-        deps = protodeps + well_known_proto_libs(),
++        deps = protodeps,
+         visibility = visibility,
+         testonly = testonly,
+     )
