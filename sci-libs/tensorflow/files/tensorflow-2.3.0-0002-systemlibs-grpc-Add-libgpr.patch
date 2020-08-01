@@ -1,0 +1,34 @@
+diff --git a/third_party/systemlibs/grpc.BUILD b/third_party/systemlibs/grpc.BUILD
+index fd90eb0..c14e54b 100644
+--- a/third_party/systemlibs/grpc.BUILD
++++ b/third_party/systemlibs/grpc.BUILD
+@@ -7,25 +7,25 @@ filegroup(
+ 
+ cc_library(
+     name = "grpc",
+-    linkopts = ["-lgrpc"],
++    linkopts = ["-lgrpc", "-lgpr"],
+     visibility = ["//visibility:public"],
+ )
+ 
+ cc_library(
+     name = "grpc++",
+-    linkopts = ["-lgrpc++"],
++    linkopts = ["-lgrpc++", "-lgpr"],
+     visibility = ["//visibility:public"],
+ )
+ 
+ cc_library(
+     name = "grpc_unsecure",
+-    linkopts = ["-lgrpc_unsecure"],
++    linkopts = ["-lgrpc_unsecure", "-lgpr"],
+     visibility = ["//visibility:public"],
+ )
+ 
+ cc_library(
+     name = "grpc++_unsecure",
+-    linkopts = ["-lgrpc++_unsecure"],
++    linkopts = ["-lgrpc++_unsecure", "-lgpr"],
+     visibility = ["//visibility:public"],
+ )
+ 
