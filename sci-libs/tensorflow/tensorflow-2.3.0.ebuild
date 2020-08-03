@@ -53,6 +53,7 @@ bazel_external_uris="
 	https://github.com/google/ruy/archive/34ea9f4993955fa1ff4eb58e504421806b7f2e8f.zip
 	https://github.com/pytorch/cpuinfo/archive/d5e37adf1406cf899d7d9ec1d317c47506ccb970.tar.gz
 	https://storage.googleapis.com/mirror.tensorflow.org/github.com/pytorch/cpuinfo/archive/6cecd15784fcb6c5c0aa7311c6248879ce2cb8b2.zip
+	https://mirror.bazel.build/github.com/bazelbuild/rules_proto/archive/97d8af4dc474595af3900dd85cb3a29ad28cc313.tar.gz
 	cuda? (
 		https://github.com/nvidia/nccl/archive/5949d96f36d050e59d05872f8bbffd2549318e95.tar.gz -> nvidia-nccl-5949d96f36d050e59d05872f8bbffd2549318e95.tar.gz
 		https://github.com/NVlabs/cub/archive/1.8.0.zip -> cub-1.8.0.zip
@@ -76,7 +77,7 @@ RDEPEND="
 	dev-libs/libpcre
 	dev-libs/nsync
 	dev-libs/openssl:0=
-	>=dev-libs/protobuf-3.8.0:=
+	>=dev-libs/protobuf-3.9.0:=
 	>=dev-libs/re2-0.2019.06.01
 	media-libs/giflib
 	media-libs/libjpeg-turbo
@@ -288,7 +289,7 @@ src_configure() {
 		# This is not autoconf
 		./configure || die
 
-		echo 'build --config=noaws --config=nohdfs --config=nogcp --config=monolithic' >> .bazelrc || die
+		echo 'build --config=noaws --config=nohdfs --config=nogcp' >> .bazelrc || die
 		echo 'build --define tensorflow_mkldnn_contraction_kernel=0' >> .bazelrc || die
 	}
 	if use python; then
