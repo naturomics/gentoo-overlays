@@ -11,7 +11,7 @@ inherit cmake cuda distutils-r1 prefix
 
 DESCRIPTION="Tensors and Dynamic neural networks in Python with strong GPU acceleration"
 HOMEPAGE="https://pytorch.org/"
-SRC_URI="https://github.com/pytorch/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz
+SRC_URI="https://github.com/pytorch/${PN}/archive/d697bb4220ff5ea8b46591cc082583bbf1a294a4.tar.gz -> ${P}.tar.gz
 https://github.com/google/benchmark/archive/e991355c02b93fe17713efe04cbc2e278e00fdbd.tar.gz -> benchmark-e991355c02b93fe17713efe04cbc2e278e00fdbd.tar.gz
 https://github.com/pytorch/cpuinfo/archive/63b25457.tar.gz -> cpuinfo-63b25457.tar.gz
 https://github.com/NVlabs/cub/archive/d106ddb991a56c3df1b6d51b2409e36ba8181ce4.tar.gz -> cub-d106ddb991a56c3df1b6d51b2409e36ba8181ce4.tar.gz
@@ -26,13 +26,13 @@ https://github.com/Maratyszcza/FXdiv/archive/b408327ac2a15ec3e43352421954f5b1967
 https://github.com/google/gemmlowp/archive/3fb5c176.tar.gz -> gemmlowp-3fb5c176.tar.gz
 https://github.com/facebookincubator/gloo/archive/c22a5cfba94edf8ea4f53a174d38aa0c629d070f.tar.gz -> gloo-c22a5cfba94edf8ea4f53a174d38aa0c629d070f.tar.gz
 https://github.com/google/googletest/archive/e2239ee6043f73722e7aa812a459f54a28552929.tar.gz -> googletest-e2239ee6043f73722e7aa812a459f54a28552929.tar.gz
-https://github.com/intel/ideep/archive/9ca27bbfd88fa1469cbf0467bd6f14cd1738fa40.tar.gz -> ideep-9ca27bbfd88fa1469cbf0467bd6f14cd1738fa40.tar.gz
+https://github.com/intel/ideep/archive/82aac435b5ecfec0855d0d72b84aee3ed0e72813.tar.gz -> ideep-82aac435b5ecfec0855d0d72b84aee3ed0e72813.tar.gz
 https://github.com/intel/mkl-dnn/archive/5ef631a0.tar.gz -> mkl-dnn-5ef631a0.tar.gz
 cuda? ( https://github.com/NVIDIA/nccl/archive/c5790b36722d5b41ee2a9b2bad69e364180ffd22.tar.gz -> nccl-c5790b36722d5b41ee2a9b2bad69e364180ffd22.tar.gz )
 https://github.com/Maratyszcza/NNPACK/archive/c07e3a0400713d546e0dea2d5466dd22ea389c73.tar.gz -> NNPACK-c07e3a0400713d546e0dea2d5466dd22ea389c73.tar.gz
 https://github.com/onnx/onnx/archive/a82c6a70.tar.gz -> onnx-a82c6a70.tar.gz
 https://github.com/onnx/onnx-tensorrt/archive/c153211418a7c57ce071d9ce2a41f8d1c85a878f.tar.gz -> onnx-tensorrt-c153211418a7c57ce071d9ce2a41f8d1c85a878f.tar.gz
-https://github.com/onnx/onnx/archive/29e7aa7048809784465d06e897f043a4600642b2.tar.gz -> onnx-29e7aa7048809784465d06e897f043a4600642b2.tar.gz
+https://github.com/onnx/onnx/archive/85546f8c44e627f8ff1181725d03cc49f675e44f.tar.gz -> onnx-85546f8c44e627f8ff1181725d03cc49f675e44f.tar.gz
 https://github.com/google/benchmark/archive/e776aa02.tar.gz -> benchmark-e776aa02.tar.gz
 https://github.com/google/benchmark/archive/5b7683f4.tar.gz -> benchmark-5b7683f4.tar.gz
 https://github.com/google/googletest/archive/5ec7f0c4.tar.gz -> googletest-5ec7f0c4.tar.gz
@@ -41,12 +41,12 @@ https://github.com/Maratyszcza/pthreadpool/archive/a134dd5d4cee80cce15db81a72e7f
 https://github.com/Maratyszcza/PeachPy/archive/07d8fde8ac45d7705129475c0f94ed8925b93473.tar.gz -> PeachPy-07d8fde8ac45d7705129475c0f94ed8925b93473.tar.gz
 https://github.com/pytorch/QNNPACK/archive/7d2a4e9931a82adc3814275b6219a03e24e36b4c.tar.gz -> QNNPACK-7d2a4e9931a82adc3814275b6219a03e24e36b4c.tar.gz
 https://github.com/shibatch/sleef/archive/e0a003ee838b75d11763aa9c3ef17bf71a725bff.tar.gz -> sleef-e0a003ee838b75d11763aa9c3ef17bf71a725bff.tar.gz
-https://github.com/pytorch/tensorpipe/archive/d2aa3485e8229c98891dfd604b514a39d45a5c99.tar.gz -> tensorpipe-d2aa3485e8229c98891dfd604b514a39d45a5c99.tar.gz
+https://github.com/pytorch/tensorpipe/archive/52791a2fd214b2a9dc5759d36725909c1daa7f2e.tar.gz -> tensorpipe-52791a2fd214b2a9dc5759d36725909c1daa7f2e.tar.gz
 https://github.com/google/googletest/archive/2fe3bd99.tar.gz -> googletest-2fe3bd99.tar.gz
 https://github.com/google/libnop/archive/aa95422e.tar.gz -> libnop-aa95422e.tar.gz
 https://github.com/libuv/libuv/archive/48e04275332f5753427d21a52f17ec6206451f2c.tar.gz -> libuv-48e04275332f5753427d21a52f17ec6206451f2c.tar.gz
 https://github.com/google/XNNPACK/archive/79cd5f9e18ad0925ac9a050b00ea5a36230072db.tar.gz -> XNNPACK-79cd5f9e18ad0925ac9a050b00ea5a36230072db.tar.gz
-https://github.com/pytorch/kineto/archive/879a203d9bf554e95541679ddad6e0326f272dc1.tar.gz -> kineto-879a203d9bf554e95541679ddad6e0326f272dc1.tar.gz
+https://github.com/pytorch/kineto/archive/b5bb62d25be75c381dbbd975276602f021982ef2.tar.gz -> kineto-b5bb62d25be75c381dbbd975276602f021982ef2.tar.gz
 https://github.com/driazati/breakpad/archive/edbb99f95c75be27d038fffb1d969cdacf705db2.tar.gz -> breakpad-edbb99f95c75be27d038fffb1d969cdacf705db2.tar.gz
 https://github.com/mikey/linux-syscall-support/archive/e1e7b0ad8ee99a875b272c8e33e308472e897660.tar.gz -> lss-e1e7b0ad8ee99a875b272c8e33e308472e897660.tar.gz
 "
@@ -63,12 +63,12 @@ KEYWORDS="~amd64"
 IUSE="asan blas cuda +fbgemm ffmpeg gflags glog +gloo leveldb lmdb mkldnn mpi namedtensor +nnpack numa +observers opencl opencv +openmp +python +qnnpack redis rocm static tools zeromq"
 REQUIRED_USE="	?? ( cuda rocm )"
 
+#cuda? ( dev-libs/cudnn )
 RDEPEND="
 	$(python_gen_cond_dep '
 	dev-python/pyyaml[${PYTHON_USEDEP}]
 	')
 	blas? ( virtual/blas )
-	cuda? ( dev-libs/cudnn )
 	rocm? ( >=dev-util/hip-4.3
 			>=dev-libs/rccl-4.3
 			>=sci-libs/rocThrust-4.3
@@ -118,15 +118,15 @@ DEPEND="${RDEPEND}
 "
 
 PATCHES=(
-	"${FILESDIR}"/${PN}-1.9.0-Change-library-directory-according-to-CMake-build.patch
-	"${FILESDIR}"/${PN}-1.6.0-global-dlopen.patch
-	"${FILESDIR}"/0002-Don-t-build-libtorch-again-for-PyTorch-1.7.1.patch
+    "${FILESDIR}"/${PN}-9999-Change-library-directory-according-to-CMake-build.patch
+	"${FILESDIR}"/${PN}-9999-global-dlopen.patch
+	"${FILESDIR}"/${PN}-9999-Don-t-build-libtorch-again.patch
 	"${FILESDIR}"/${PN}-1.7.1-no-rpath.patch
-	"${FILESDIR}"/${PN}-1.7.1-torch_shm_manager.patch
-	"${FILESDIR}"/${PN}-1.10.0-nonull.patch
-	"${FILESDIR}"/${PN}-1.10.0-fix-distutils.patch
-	"${FILESDIR}"/${PN}-1.10.0-clhpp2.patch
+	"${FILESDIR}"/${PN}-9999-torch_shm_manager.patch
+	"${FILESDIR}"/${PN}-9999-clhpp2.patch
 )
+
+S="${WORKDIR}/pytorch-d697bb4220ff5ea8b46591cc082583bbf1a294a4"
 
 distutils_enable_tests --install pytest
 
@@ -163,7 +163,7 @@ src_prepare() {
 	rmdir third_party/googletest || die
 	ln -sv "${WORKDIR}"/googletest-e2239ee6043f73722e7aa812a459f54a28552929 third_party/googletest || die
 	rmdir third_party/ideep || die
-	ln -sv "${WORKDIR}"/ideep-9ca27bbfd88fa1469cbf0467bd6f14cd1738fa40 third_party/ideep || die
+	ln -sv "${WORKDIR}"/ideep-82aac435b5ecfec0855d0d72b84aee3ed0e72813 third_party/ideep || die
 	rmdir third_party/ideep/mkl-dnn || die
 	ln -sv "${WORKDIR}"/mkl-dnn-5ef631a030a6f73131c77892041042805a06064f third_party/ideep/mkl-dnn || die
 	rmdir third_party/nccl/nccl || die
@@ -171,7 +171,7 @@ src_prepare() {
 	rmdir third_party/NNPACK || die
 	ln -sv "${WORKDIR}"/NNPACK-c07e3a0400713d546e0dea2d5466dd22ea389c73 third_party/NNPACK || die
 	rmdir third_party/onnx || die
-	ln -sv "${WORKDIR}"/onnx-29e7aa7048809784465d06e897f043a4600642b2 third_party/onnx || die
+	ln -sv "${WORKDIR}"/onnx-85546f8c44e627f8ff1181725d03cc49f675e44f third_party/onnx || die
 	rmdir third_party/onnx-tensorrt || die
 	ln -sv "${WORKDIR}"/onnx-tensorrt-c153211418a7c57ce071d9ce2a41f8d1c85a878f third_party/onnx-tensorrt || die
 	rmdir third_party/onnx-tensorrt/third_party/onnx || die
@@ -189,7 +189,7 @@ src_prepare() {
 	rmdir third_party/sleef || die
 	ln -sv "${WORKDIR}"/sleef-e0a003ee838b75d11763aa9c3ef17bf71a725bff third_party/sleef || die
 	rmdir third_party/tensorpipe || die
-	ln -sv "${WORKDIR}"/tensorpipe-d2aa3485e8229c98891dfd604b514a39d45a5c99 third_party/tensorpipe || die
+	ln -sv "${WORKDIR}"/tensorpipe-52791a2fd214b2a9dc5759d36725909c1daa7f2e third_party/tensorpipe || die
 	rmdir third_party/tensorpipe/third_party/googletest || die
 	ln -sv "${WORKDIR}"/googletest-2fe3bd994b3189899d93f1d5a881e725e046fdc2 third_party/tensorpipe/third_party/googletest || die
 	rmdir third_party/tensorpipe/third_party/libnop || die
@@ -199,7 +199,7 @@ src_prepare() {
 	rmdir third_party/XNNPACK || die
 	ln -sv "${WORKDIR}"/XNNPACK-79cd5f9e18ad0925ac9a050b00ea5a36230072db third_party/XNNPACK || die
 	rmdir third_party/kineto || die
-	ln -sv "${WORKDIR}"/kineto-879a203d9bf554e95541679ddad6e0326f272dc1 third_party/kineto || die
+	ln -sv "${WORKDIR}"/kineto-b5bb62d25be75c381dbbd975276602f021982ef2 third_party/kineto || die
 	rmdir third_party/breakpad || die
 	ln -sv "${WORKDIR}"/breakpad-edbb99f95c75be27d038fffb1d969cdacf705db2 third_party/breakpad || die
 	rmdir third_party/breakpad/src/third_party/lss || die

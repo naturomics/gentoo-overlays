@@ -1,5 +1,5 @@
 diff --git a/caffe2/contrib/opencl/OpenCL/cl.hpp b/caffe2/contrib/opencl/OpenCL/cl.hpp
-index 87cc4a1..7c27e33 100644
+index bb33da6..c8f3fe8 100644
 --- a/caffe2/contrib/opencl/OpenCL/cl.hpp
 +++ b/caffe2/contrib/opencl/OpenCL/cl.hpp
 @@ -76,7 +76,7 @@
@@ -25,7 +25,7 @@ index b1e61c2..968d3c7 100644
  
  #define OPENCL_CHECK(expr) (void)expr
 diff --git a/caffe2/mobile/contrib/libopencl-stub/include/CL/cl.hpp b/caffe2/mobile/contrib/libopencl-stub/include/CL/cl.hpp
-index f3badf7..928c9f0 100644
+index 1945198..0ae0ab8 100644
 --- a/caffe2/mobile/contrib/libopencl-stub/include/CL/cl.hpp
 +++ b/caffe2/mobile/contrib/libopencl-stub/include/CL/cl.hpp
 @@ -76,7 +76,7 @@
@@ -37,16 +37,3 @@ index f3badf7..928c9f0 100644
   * #endif
   * #include <cstdio>
   * #include <cstdlib>
-diff --git a/third_party/tensorflow_cuda_bazel_build/cuda/BUILD b/third_party/tensorflow_cuda_bazel_build/cuda/BUILD
-index f7271af..334f4ec 100755
---- a/third_party/tensorflow_cuda_bazel_build/cuda/BUILD
-+++ b/third_party/tensorflow_cuda_bazel_build/cuda/BUILD
-@@ -188,7 +188,7 @@ CUDA_INCLUDES_FILES = [
-     "include/CL/cl_gl_ext.h",
-     "include/CL/cl_gl.h",
-     "include/CL/cl.h",
--    "include/CL/cl.hpp",
-+    "include/CL/cl2.hpp",
-     "include/CL/cl_platform.h",
-     "include/CL/opencl.h",
-     "include/common_functions.h",
